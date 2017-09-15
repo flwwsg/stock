@@ -20,11 +20,15 @@ stacks = []
 tmp = webdriver.Chrome()
 i = 0
 for iurl in top_fund_urls:
-    index = iurl.get_attribute('href')
+    try:
+        index = iurl.get_attribute('href')
+    except Exception:
+        continue
     print(iurl.text)
     tmp.get(index)
     time.sleep(3)
-    ts = tmp.find_elements_by_xpath(stack_in_top_fund_xpath)
+    ts = tmp.find_elements_by_xpath(
+stack_in_top_fund_xpath)
     stacks.append([i.text for i in ts])
 
 tmp.quit()
