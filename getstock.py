@@ -22,7 +22,7 @@ stacks = []
 top_fund = []
 tmp = webdriver.Chrome()
 i = 0
-for iurl, iname in zip(top_fund_urls[:2], top_fund_names[:2]):
+for iurl, iname in zip(top_fund_urls, top_fund_names):
     try:
         index = iurl.get_attribute('href')
     except Exception:
@@ -32,7 +32,7 @@ for iurl, iname in zip(top_fund_urls[:2], top_fund_names[:2]):
     time.sleep(3)
     ts = tmp.find_elements_by_xpath(
 stack_in_top_fund_xpath)
-    stacks.append({i.text:i.get_attribute('href').split('/')[3][:-5] for i in ts})
+    stacks.append({i.get_attribute('href').split('/')[3][:-5] :i.text for i in ts})
     top_fund.append(iname.text)
 
 tmp.quit()
