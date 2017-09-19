@@ -3,15 +3,13 @@ import time
 from handler import count_stocks
 
 
-def get_top_fund(browser):
+def get_top_fund(browser, top_fund=[], stacks=[]):
     top_fund_url_xpath = '//div[@class="dbtable"]/table[@id="dbtable"]/tbody/tr/td[3]/a'
     top_fund_name_xpath = '//div[@class="dbtable"]/table[@id="dbtable"]/tbody/tr/td[4]/a'
     stack_in_top_fund_xpath = '//div[@class="bd"]/ul/li[@id="position_shares"]/div/table/tbody/tr/td[1]/a'
     top_fund_urls = browser.find_elements_by_xpath(top_fund_url_xpath)
     top_fund_names = browser.find_elements_by_xpath(top_fund_name_xpath)
     print(len(top_fund_urls))
-    stacks = []
-    top_fund = []
     tmp = webdriver.Chrome()
     i = 0
     for iurl, iname in zip(top_fund_urls, top_fund_names):
@@ -46,9 +44,14 @@ hy.click()
 time.sleep(5)
 
 reserved = []
-while not reserved:
-    top_fund, stacks = get_top_fund(browser)
+top_fund = []
+stacks = []
+
+while True:
+    get_top_fund(browser, top_fund, stacks)
     reserved = count_stocks(top_fund, stacks)
+    if reserved:
+    	break
     next_page = browser.find_element_by_xpath(
         '//div[@id="pagebar"]/label[contains(text(), "下一页")]')
     browser.execute_script('arguments[0].click();', next_page)
