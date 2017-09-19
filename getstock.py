@@ -1,5 +1,6 @@
 from selenium import webdriver
 import time
+from handler import count_stocks
 
 hybrid_fund = '//div[@class="types"]/ul[@id="types"]/li[contains(text(),"混合")]'
 top_fund_url_xpath = '//div[@class="dbtable"]/table[@id="dbtable"]/tbody/tr/td[3]/a'
@@ -39,4 +40,4 @@ tmp.quit()
 browser.quit()
 print(top_fund)
 print(stacks)
-
+count_stocks(top_fund, stacks)
