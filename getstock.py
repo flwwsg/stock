@@ -47,16 +47,15 @@ reserved = []
 top_fund = []
 stacks = []
 
-while True:
+while not reserved:
     get_top_fund(browser, top_fund, stacks)
     reserved = count_stocks(top_fund, stacks)
-    if reserved:
-    	break
+
     next_page = browser.find_element_by_xpath(
         '//div[@id="pagebar"]/label[contains(text(), "下一页")]')
     browser.execute_script('arguments[0].click();', next_page)
     time.sleep(3)
-    print(top_fund)
-    print(stacks)
+    # print(top_fund)
+    # print(stacks)
 
 browser.quit()
