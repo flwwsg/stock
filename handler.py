@@ -35,10 +35,10 @@ def count_stocks(labels, stocks):
             #             for i in range(1, 4)]
             #     if all(test):
             #         reserved.append(i)
-           	if hist['close'].mean() < 20:
-            	reserved.append(i)
+            if hist['close'].mean() < 20:
+                reserved.append(i)
+
     print(reserved)
     return reserved
 # if __name__ == '__main__':
 # 	count_stocks(labels, stocks)
-
