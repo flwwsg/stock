@@ -10,15 +10,15 @@ def count_stocks(labels, stocks):
     exists = []
     reserved = []
     for label, stock in zip(labels, stocks):
-        if label[:2] in exists:
-            continue
-        else:
-            exists.append(label[:2])
-            nlist.extend(stock.keys())
+    # if label[:2] in exists:
+    #     continue
+    # else:
+    #     exists.append(label[:2])
+        nlist.extend(stock.keys())
 
     scount = Series(nlist).value_counts()
-    print(scount)
-    res = scount[scount > 1].index
+    # print(scount)
+    res = scount[scount > 2].index
     endtime = pd.datetime.today()
     starttime = endtime - BDay(4)
     starttime = starttime.strftime('%Y-%m-%d')
@@ -30,15 +30,13 @@ def count_stocks(labels, stocks):
         # print(i)
         if hist is not None:
             # l = len(hist)
-            # if hist['close'].mean() < 20 and l > 3:
-            #     test = [hist['close'][i] > hist['close'][i-1]
-            #             for i in range(1, 4)]
-            #     if all(test):
-            #         reserved.append(i)
-            if hist['close'].mean() < 20:
+            if hist['close'].mean() < 15:
+                # test = [hist['close'][i] > hist['close'][i-1]
+                #         for i in range(1, 3)]
+                # if all(test):
                 reserved.append(i)
 
-    print(reserved)
+    # print(reserved)
     return reserved
 # if __name__ == '__main__':
 # 	count_stocks(labels, stocks)

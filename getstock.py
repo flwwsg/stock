@@ -17,7 +17,7 @@ def get_top_fund(browser, top_fund=[], stacks=[]):
             index = iurl.get_attribute('href')
         except Exception:
             continue
-        print(iurl.text)
+        # print(iurl.text)
         tmp.get(index)
         time.sleep(3)
         ts = tmp.find_elements_by_xpath(
@@ -30,10 +30,9 @@ def get_top_fund(browser, top_fund=[], stacks=[]):
 
 
 hybrid_fund = '//div[@class="types"]/ul[@id="types"]/li[contains(text(),"混合")]'
-
+top_fund_month = '//div[@class="dbtable"]/table[@id="dbtable"]/thead/tr/th[@col="1yzf"]'
 top_fund_index_xpath = '//div[@class="dbtable"]/table[@id="dbtable"]/thead/tr/th'
 top_fund_next_page_xpath = '//div[@id="pagebar"]/label[contains(text(), "下一页")]'
-
 start_url = 'http://fund.eastmoney.com/data/fundranking.html'
 browser = webdriver.Chrome()
 
@@ -42,20 +41,23 @@ browser.get(start_url)
 hy = browser.find_element_by_xpath(hybrid_fund)
 hy.click()
 time.sleep(5)
+browser.find_element_by_xpath(top_fund_month).click()
+time.sleep(5)
 
 reserved = []
 top_fund = []
 stacks = []
-
-while not reserved:
-    get_top_fund(browser, top_fund, stacks)
-    reserved = count_stocks(top_fund, stacks)
-
-    next_page = browser.find_element_by_xpath(
-        '//div[@id="pagebar"]/label[contains(text(), "下一页")]')
-    browser.execute_script('arguments[0].click();', next_page)
-    time.sleep(3)
-    # print(top_fund)
-    # print(stacks)
+# page = 2
+# while page > 0:
+get_top_fund(browser, top_fund, stacks)
+next_page = browser.find_element_by_xpath(
+    '//div[@id="pagebar"]/label[contains(text(), "下一页")]')
+browser.execute_script('arguments[0].click();', next_page)
+time.sleep(3)
+get_top_fund(browser, top_fund, stacks)
+reserved = count_stocks(top_fund, stacks)
+# print(top_fund)
+# print(stacks)
+print(reserved)
 
 browser.quit()
