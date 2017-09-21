@@ -14,7 +14,7 @@ def count_stocks(labels, stocks):
 
     scount = Series(nlist).value_counts()
     # print(scount)
-    res = scount[scount > 0].index
+    res = scount[scount > 2].index
     endtime = pd.datetime.today()
     starttime = endtime - BDay(5)
     starttime = starttime.strftime('%Y-%m-%d')
