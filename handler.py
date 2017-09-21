@@ -16,7 +16,7 @@ def count_stocks(labels, stocks):
     print(scount)
     res = scount[scount > 2].index
     endtime = pd.datetime.today()
-    starttime = endtime - BDay(3)
+    starttime = endtime - BDay(4)
     starttime = starttime.strftime('%Y-%m-%d')
     endtime = endtime.strftime('%Y-%m-%d')
 
@@ -25,8 +25,8 @@ def count_stocks(labels, stocks):
         print(hist)
         # print(i)
         if hist is not None:
-            # l = len(hist)
-            if hist['close'].mean() < 15:
+            l = len(hist)
+            if hist['close'].mean() < 15 and l > 3:
                 test = [abs(hist['close'][i] - hist['close'][i-1])< 0.3
                         for i in range(1, 4)]
                 if all(test):
