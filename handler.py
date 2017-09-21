@@ -13,22 +13,22 @@ def count_stocks(labels, stocks):
         nlist.extend(stock.keys())
 
     scount = Series(nlist).value_counts()
-    print(scount)
-    res = scount[scount > 2].index
+    # print(scount)
+    res = scount[scount > 0].index
     endtime = pd.datetime.today()
-    starttime = endtime - BDay(4)
+    starttime = endtime - BDay(5)
     starttime = starttime.strftime('%Y-%m-%d')
     endtime = endtime.strftime('%Y-%m-%d')
 
     for i in res:
         hist = ts.get_hist_data(code=i, start=starttime, end=endtime)
-        print(hist)
+        # print(hist)
         # print(i)
         if hist is not None:
             l = len(hist)
-            if hist['close'].mean() < 15 and l > 3:
+            if hist['close'].mean() < 15 and l > 4:
                 test = [abs(hist['close'][i] - hist['close'][i-1])< 0.3
-                        for i in range(1, 4)]
+                        for i in range(1, 5)]
                 if all(test):
                     reserved.append(i)
 
