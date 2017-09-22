@@ -4,3 +4,13 @@
 4 find the stock frequency big than 2 times (including 2 times) and less than 20 yuan if number of stock less than 3, find the stock frequency big than 1 times (including 1 times)
 5 filter the green 3-4 day stock 
 6 tip for green than 4%
+
+
+second station:
+1 monitor specified stock , when fall in stock, tipping me (in 9:30 - 11:30, 13:30 - 15:00)
+2 regularly (one week a time ) tell me the stock in top fund and concept 
+3 give me ther 3 month price of each stock
+
+
+technology:
+django , rest framework, django-filters , celery
