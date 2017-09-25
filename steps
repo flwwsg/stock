@@ -4,3 +4,5 @@
 4 find the stock frequency big than 2 times (including 2 times) and less than 20 yuan if number of stock less than 3, find the stock frequency big than 1 times (including 1 times)
 5 filter the green 3-4 day stock 
 6 tip for green than 4%
+
+get one-week top fund and one-month top fund , select 2 stocks from each concept
