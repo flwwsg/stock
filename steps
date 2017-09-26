@@ -13,4 +13,4 @@ second station:
 
 
 technology:
-django , rest framework, django-filters , celery
+django , rest framework, django-filters , celery, vue
