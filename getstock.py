@@ -47,19 +47,22 @@ time.sleep(5)
 reserved = []
 top_fund = []
 stacks = []
-# page = 2
-# while page > 0:
 get_top_fund(browser, top_fund, stacks)
+
+# next page
 next_page = browser.find_element_by_xpath(
     '//div[@id="pagebar"]/label[contains(text(), "下一页")]')
 browser.execute_script('arguments[0].click();', next_page)
 time.sleep(3)
 get_top_fund(browser, top_fund, stacks)
-reserved = count_stocks(top_fund, stacks)
+
 # print(top_fund)
 # print(stacks)
-stocks_to_be_chk = input('input stocks you want to check>>\n')
-new = set(reserved) - set(stocks_to_be_chk.split())
-print(new)
+reserved = count_stocks(top_fund, stacks)
+# print(reserved)
+# stocks_to_be_chk = input('input stocks you want to check>>\n')
+# new = set(reserved) - set(stocks_to_be_chk.split())
+# print(new)
+
 
 browser.quit()
