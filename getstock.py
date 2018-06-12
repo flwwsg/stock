@@ -44,7 +44,6 @@ time.sleep(5)
 browser.find_element_by_xpath(top_fund_month).click()
 time.sleep(5)
 
-reserved = []
 top_fund = []
 stacks = []
 get_top_fund(browser, top_fund, stacks)
