@@ -8,6 +8,6 @@ import tushare as ts
 import time
 
 while True:
-    df = ts.get_realtime_quotes(('600438', '601777'))
+    df = ts.get_realtime_quotes('603993')
     print(df[['price', 'bid', 'ask', 'volume', 'amount', 'time']])
     time.sleep(2)
