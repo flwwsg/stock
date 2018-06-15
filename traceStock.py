@@ -37,16 +37,32 @@ class Monitor(Model):
         database = db
 
 
-def stock_tick(code):
+def stock_tick(code=""):
     """
     monitoring stock
     :param code:
     :return:
     """
+    if code != "":
+        add_stock_to_monitor(code, auto=True)
+    codes = [row.code for row in Monitor.select()]
+    if len(codes) == 0:
+        logging.info("nothing to monitor")
+        return
+    if len(codes) > 10:
+        logging.info("too much (greater than 10) stock to monitor")
+        return
     while True:
-        df = ts.get_realtime_quotes(code)
+        df = ts.get_realtime_quotes(codes)
         print(df[['price', 'bid', 'ask', 'volume', 'amount', 'time']])
         time.sleep(2)
+
+
+def add_stock_to_monitor(code, auto):
+    try:
+        Monitor.get(code=code)
+    except Monitor.DoesNotExist:
+        Monitor.create(code=code, auto=auto, updated=datetime.datetime.now())
 
 
 def check_recent_stock(price):
@@ -171,5 +187,6 @@ def check_published_date(published_date, interval=365):
 
 if __name__ == "__main__":
     init_recent_stock()
-    # stock_tick("603993")
+    add_stock_to_monitor("603809", True)
+    stock_tick()
     # print(check_recent_stock_below_days("603993"))
