@@ -7,7 +7,6 @@ import tushare as ts
 
 def count_stocks(labels, stocks):
     nlist = []
-    exists = []
     reserved = []
     for label, stock in zip(labels, stocks):
         nlist.extend(stock.keys())
@@ -15,13 +14,13 @@ def count_stocks(labels, stocks):
     scount = Series(nlist).value_counts()
     print(scount[:20])
     res = scount[:50].index
-    endtime = pd.datetime.today()
-    starttime = endtime - BDay(7)
-    starttime = starttime.strftime('%Y-%m-%d')
-    endtime = endtime.strftime('%Y-%m-%d')
+    end_time = pd.datetime.today()
+    start_time = end_time - BDay(7)
+    start_time = start_time.strftime('%Y-%m-%d')
+    end_time = end_time.strftime('%Y-%m-%d')
 
     for i in res:
-        hist = ts.get_hist_data(code=i, start=starttime, end=endtime)
+        hist = ts.get_hist_data(code=i, start=start_time, end=end_time)
         # print(hist)
         # print(i)
         apped = True
