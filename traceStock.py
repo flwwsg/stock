@@ -7,9 +7,10 @@
 import tushare as ts
 import time
 import datetime
-from peewee import *
+from peewee import CharField, SqliteDatabase, DateTimeField, FloatField,  BooleanField, Model
 import json
 import logging
+from collections import namedtuple
 
 db = SqliteDatabase("stock.db")
 logging.basicConfig()
@@ -32,6 +33,8 @@ class Monitor(Model):
     code = CharField(primary_key=True, max_length=6)
     auto = BooleanField(default=True)
     updated = DateTimeField()
+    name = CharField(max_length=40)
+    today_price = FloatField()
 
     class Meta:
         database = db
@@ -67,13 +70,16 @@ def add_stock_to_monitor(code, auto):
 
 def check_recent_stock(price):
     code_to_check = []
+    stock = namedtuple("stock", ["code", "name", "today_price"])
     for row in Stock.select():
         today_price = get_today_price(row.code)
         if today_price == 0:
             continue
-        if today_price < price or 0 < row.published_price < price:
+        if today_price < price or price < float(row.published_price) :
             if check_recent_stock_below_days(row.code):
-                code_to_check.append(row.code)
+                r = stock(row.code, row.name, today_price)
+                print("selected code is %s, today_price is %s, published_price is %s, base price is %s" % (r.name, r.today_price, row.published_price, price))
+                code_to_check.append(r)
     for row in  Monitor.select():
         if row.auto:
             row.delete_instance()
@@ -83,8 +89,8 @@ def check_recent_stock(price):
             if row.code in code_to_check:
                 code_to_check.remove(row.code)
 
-    for code in code_to_check:
-        Monitor.create(code=code, auto=True, updated=datetime.datetime.now())
+    for row in code_to_check:
+        Monitor.create(code=row.code, name=row.name, today_price=row.today_price, auto=True, updated=datetime.datetime.now())
 
     return code_to_check
 
@@ -164,7 +170,7 @@ def get_today_price(code):
     row = get_today_stock_info(code)
     if row is None:
         return 0
-    return row['price']
+    return float(row['price'])
 
 
 def get_today_stock_info(code):
@@ -172,6 +178,9 @@ def get_today_stock_info(code):
         df = ts.get_realtime_quotes(code)
     except Exception:
         logging.error("error in %s" % code)
+        return None
+    if df is None:
+        logging.error("today stock %s is none" % code)
         return None
     return next(df.iterrows())[1]
 
@@ -186,7 +195,6 @@ def check_published_date(published_date, interval=365):
 
 
 if __name__ == "__main__":
-    init_recent_stock()
-    add_stock_to_monitor("603809", True)
+    check_recent_stock(30)
+    # init_recent_stock()
     stock_tick()
-    # print(check_recent_stock_below_days("603993"))
