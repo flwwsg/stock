@@ -194,6 +194,5 @@ def check_published_date(published_date, interval=365):
 
 
 if __name__ == "__main__":
-    check_recent_stock(30)
-    # init_recent_stock()
+    check_recent_stock(20)
     stock_tick()
