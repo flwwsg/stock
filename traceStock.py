@@ -87,6 +87,9 @@ def check_recent_stock(price):
                 print("selected code is %s, today_price is %s, published_price is %s, base price is %s" % (r.name, r.today_price, row.published_price, price))
                 if row.code not in remain:
                     code_to_check.append(r)
+                else:
+                    row.updated = datetime.datetime.now()
+                    row.save()
 
     for row in code_to_check:
         Monitor.create(code=row.code, name=row.name, today_price=row.today_price, auto=True, updated=datetime.datetime.now())
