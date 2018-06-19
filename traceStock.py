@@ -71,6 +71,12 @@ def add_stock_to_monitor(code, auto):
 def check_recent_stock(price):
     code_to_check = []
     stock = namedtuple("stock", ["code", "name", "today_price"])
+    remain = []
+    for row in  Monitor.select():
+        if row.auto:
+            row.delete_instance()
+        else:
+            remain.append(row.code)
     for row in Stock.select():
         today_price = get_today_price(row.code)
         if today_price == 0:
@@ -79,15 +85,8 @@ def check_recent_stock(price):
             if check_recent_stock_below_days(row.code):
                 r = stock(row.code, row.name, today_price)
                 print("selected code is %s, today_price is %s, published_price is %s, base price is %s" % (r.name, r.today_price, row.published_price, price))
-                code_to_check.append(r)
-    for row in  Monitor.select():
-        if row.auto:
-            row.delete_instance()
-        else:
-            row.updated = datetime.datetime.now()
-            row.save()
-            if row.code in code_to_check:
-                code_to_check.remove(row.code)
+                if row.code not in remain:
+                    code_to_check.append(r)
 
     for row in code_to_check:
         Monitor.create(code=row.code, name=row.name, today_price=row.today_price, auto=True, updated=datetime.datetime.now())
@@ -99,9 +98,9 @@ def check_recent_stock_below_days(code):
     end_time = datetime.datetime.now()
     start_time = end_time - datetime.timedelta(days=10)
     hist = ts.get_hist_data(code=code, start=start_time.strftime('%Y-%m-%d'), end=end_time.strftime('%Y-%m-%d'))
-    if hist is None or len(hist) < 7 :
+    if hist is None or len(hist) < 5 :
         return False
-    for j in range(1, 7):
+    for j in range(1, 5):
         test = hist['close'][j] < hist['close'][j - 1] or abs(hist['close'][j] - hist['close'][j - 1]) < 1
         if not test:
             return False
