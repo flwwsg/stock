@@ -57,7 +57,7 @@ def stock_tick(code=""):
         return
     while True:
         df = ts.get_realtime_quotes(codes)
-        print(df[['price', 'bid', 'ask', 'volume', 'amount', 'time']])
+        print(df[['name', 'price', 'bid', 'ask', 'volume', 'amount', 'time']])
         time.sleep(2)
 
 
