@@ -14,6 +14,7 @@ from collections import namedtuple
 
 db = SqliteDatabase("stock.db")
 logging.basicConfig()
+MAX_STOCK = 5
 
 
 class Stock(Model):
@@ -50,10 +51,10 @@ def stock_tick(code=""):
         add_stock_to_monitor(code, auto=True)
     codes = [row.code for row in Monitor.select()]
     if len(codes) == 0:
-        logging.info("nothing to monitor")
+        logging.error("nothing to monitor")
         return
-    if len(codes) > 10:
-        logging.info("too much (greater than 10) stock to monitor")
+    if len(codes) > MAX_STOCK:
+        logging.error("too much (greater than %s) stock to monitor" % MAX_STOCK)
         return
     while True:
         df = ts.get_realtime_quotes(codes)
@@ -68,7 +69,7 @@ def add_stock_to_monitor(code, auto):
         Monitor.create(code=code, auto=auto, updated=datetime.datetime.now())
 
 
-def check_recent_stock(price):
+def check_recent_stock(base_price):
     code_to_check = []
     stock = namedtuple("stock", ["code", "name", "today_price"])
     remain = []
@@ -81,14 +82,15 @@ def check_recent_stock(price):
         today_price = get_today_price(row.code)
         if today_price == 0:
             continue
-        if today_price < price or price < float(row.published_price) :
+        if today_price < base_price or today_price < float(row.published_price) < base_price:
             if check_recent_stock_below_days(row.code):
                 r = stock(row.code, row.name, today_price)
-                print("selected code is %s, today_price is %s, published_price is %s, base price is %s" % (r.name, r.today_price, row.published_price, price))
+                print("selected code is %s, today_price is %s, published_price is %s, base price is %s" % (r.name, r.today_price, row.published_price, base_price))
                 if row.code not in remain:
                     code_to_check.append(r)
                 else:
                     row.updated = datetime.datetime.now()
+                    row.today_price = today_price
                     row.save()
 
     for row in code_to_check:
@@ -197,5 +199,5 @@ def check_published_date(published_date, interval=365):
 
 
 if __name__ == "__main__":
-    check_recent_stock(20)
+    # check_recent_stock(10)
     stock_tick()
