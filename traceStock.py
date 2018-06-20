@@ -104,7 +104,7 @@ def check_recent_stock_below_days(code):
     if hist is None or len(hist) < 5 :
         return False
     for j in range(1, 5):
-        test = hist['close'][j] < hist['close'][j - 1] or abs(hist['close'][j] - hist['close'][j - 1]) < 1
+        test = hist['close'][j-1] < hist['close'][j] or abs(hist['close'][j] - hist['close'][j - 1]) < 1
         if not test:
             return False
     return True
