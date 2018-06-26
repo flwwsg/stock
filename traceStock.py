@@ -126,6 +126,8 @@ def add_or_update_recent_stock(code, name, publish_date=None, publish_price=0, t
     try:
         record = Stock.get(Stock.code == code)
         record.today_price = today_price
+        record.published_price = publish_price if publish_price != 0 else record.published_price
+        record.published_date = publish_date if publish_date is not None else record.published_date
         record.updated = datetime.datetime.now()
         record.save()
     except Stock.DoesNotExist:
@@ -201,3 +203,5 @@ def check_published_date(published_date, interval=365):
 if __name__ == "__main__":
     check_recent_stock(10)
     stock_tick()
+    # add_or_update_recent_stock("603587", "地素时尚", "2018-6-22", "27.52" )
+    # add_or_update_recent_stock("603650", "彤程新材", "2018-6-27", "12.32" )
