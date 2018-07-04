@@ -62,6 +62,13 @@ def stock_tick(code=""):
         time.sleep(2)
 
 
+def monitor(code):
+    while True:
+        df = ts.get_realtime_quotes(code)
+        print(df[['name', 'price', 'bid', 'ask', 'volume', 'amount', 'time']])
+        time.sleep(2)
+
+
 def add_stock_to_monitor(code, auto):
     try:
         Monitor.get(code=code)
