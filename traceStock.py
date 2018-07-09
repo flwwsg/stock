@@ -208,6 +208,7 @@ def check_published_date(published_date, interval=365):
 
 
 if __name__ == "__main__":
-    check_recent_stock(20)
-    stock_tick()
-    # add_or_update_recent_stock("603693", "江苏新能", "2018-7-23", "9" )
+    # check_recent_stock(20)
+    # stock_tick()
+    add_or_update_recent_stock("603105", "芯能科技", "2018-7-9", "4.83" )
+    add_or_update_recent_stock("603706", "东方环宇", "2018-7-9", "13.09" )
